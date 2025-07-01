@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 4 Projects - ApexPlanet</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f4f7;
+      color: #333;
+    }
+    header {
+      background-color: #006d77;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 960px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #006d77;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    .todo-input, .product-filter {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 80%;
+      max-width: 400px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #006d77;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    ul, .product-list {
+      list-style: none;
+      padding: 0;
+    }
+    li, .product-item {
+      background: #e2f0ef;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Task 4 Projects</h1>
+    <p>ApexPlanet Internship - HTML, CSS & JavaScript</p>
+  </header>
+
+  <div class="container">
+    <section>
+      <h2>1. Personal Portfolio</h2>
+      <p>Hello! I'm a web developer passionate about building responsive and dynamic websites. Below are a few things about me:</p>
+      <ul>
+        <li><strong>About:</strong> Enthusiastic coder and designer.</li>
+        <li><strong>Projects:</strong> Portfolio, To-Do App, Product Page.</li>
+        <li><strong>Contact:</strong> <a href="mailto:you@example.com">you@example.com</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. To-Do List with Local Storage</h2>
+      <input type="text" id="todoInput" class="todo-input" placeholder="Enter a task">
+      <button onclick="addTodo()">Add</button>
+      <ul id="todoList"></ul>
+    </section>
+
+    <section>
+      <h2>3. Product Listing with Filter & Sort</h2>
+      <input type="text" id="filterInput" class="product-filter" placeholder="Filter by category">
+      <button onclick="sortProducts()">Sort by Price (Low to High)</button>
+      <div id="productList" class="product-list"></div>
+    </section>
+  </div>
+
+  <script>
+    // To-Do App Logic
+    let todos = JSON.parse(localStorage.getItem('todos')) || [];
+    function renderTodos() {
+      const list = document.getElementById('todoList');
+      list.innerHTML = '';
+      todos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.textContent = todo;
+        list.appendChild(li);
+      });
+    }
+    function addTodo() {
+      const input = document.getElementById('todoInput');
+      const value = input.value.trim();
+      if (value) {
+        todos.push(value);
+        localStorage.setItem('todos', JSON.stringify(todos));
+        renderTodos();
+        input.value = '';
+      }
+    }
+    renderTodos();
+
+    // Product Filter & Sort
+    const products = [
+      { name: 'Shampoo', category: 'Personal Care', price: 150 },
+      { name: 'Notebook', category: 'Stationery', price: 60 },
+      { name: 'Toothpaste', category: 'Personal Care', price: 50 },
+      { name: 'Pen', category: 'Stationery', price: 20 }
+    ];
+    function renderProducts(filtered = products) {
+      const list = document.getElementById('productList');
+      list.innerHTML = '';
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-item';
+        div.innerHTML = `<span>${p.name} (${p.category})</span><span>₹${p.price}</span>`;
+        list.appendChild(div);
+      });
+    }
+    document.getElementById('filterInput').addEventListener('input', e => {
+      const filter = e.target.value.toLowerCase();
+      const filtered = products.filter(p => p.category.toLowerCase().includes(filter));
+      renderProducts(filtered);
+    });
+    function sortProducts() {
+      const sorted = [...products].sort((a, b) => a.price - b.price);
+      renderProducts(sorted);
+    }
+    renderProducts();
+  </script>
+</body>
+</html>
